@@ -11,6 +11,7 @@ import WishlistScreen from "./screens/userScreens/WishlistScreen";
 import ForgotPassword from "./screens/authScreens/ForgotPassword";
 import AdminDashboard from "./screens/adminScreens/AdminDashboard";
 import CreateCategory from "./screens/adminScreens/category/CreateCategory";
+import UpdateCategory from "./screens/adminScreens/category/UpdateCategory";
 
 import UserPrivateRoute from "./components/routes/UserPrivateRoute";
 import AdminPrivateRoute from "./components/routes/AdminPrivateRoute";
@@ -85,6 +86,10 @@ function App() {
         <Route
           path="/admin/category"
           element={<AdminPrivateRoute element={<CreateCategory />} />}
+        />
+        <Route
+          path="/admin/category/:slug"
+          element={<AdminPrivateRoute element={<UpdateCategory />} />}
         />
       </Routes>
     </>

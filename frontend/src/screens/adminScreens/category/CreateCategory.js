@@ -5,9 +5,13 @@ import notify from "../../../utils/notify";
 import {
   createCategory,
   getAllCategories,
+  deleteCategory,
 } from "../../../services/categoryService/categoryService";
 import { useSelector } from "react-redux";
 import CreateCategoryForm from "../../../components/forms/CreateCategoryForm";
+import { Link } from "react-router-dom";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import Notify from "../../../utils/notify";
 
 function CreateCategory() {
   const { user } = useSelector((state) => ({ ...state }));
@@ -48,6 +52,24 @@ function CreateCategory() {
         }
       });
   };
+  const handleDelete = async (slug) => {
+    const answer = window.confirm("Delete Category?");
+    if (answer) {
+      try {
+        setLoading(true);
+        const response = await deleteCategory(slug, user.token);
+        Notify.success(`Category ${response.data.name} has been deleted.`);
+        categoriesList();
+      } catch (err) {
+        if (err.response.status === 400) {
+          console.error("Error deleting category:", err.response.data);
+          Notify.error("Failed to delete category");
+        }
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
 
   return (
     <div className="container-fluid">
@@ -71,11 +93,28 @@ function CreateCategory() {
                 name={name}
                 setName={setName}
                 loading={loading}
-                form={form} // Passing the  form instance here
+                form={form} // im Passing the form instance here
               />
               <hr />
               {categories.map((category) => (
-                <div key={category._id}>{category.name}</div>
+                <div
+                  className="alert alert-secondary"
+                  key={category._id}
+                  style={{ fontWeight: "bold" }}
+                >
+                  {category.name}
+                  <span
+                    onClick={() => handleDelete(category.slug)}
+                    className="btn btn-sm float-end"
+                  >
+                    Delete <DeleteOutlined className="text-danger" />
+                  </span>
+                  <Link to={`/admin/category/${category.slug}`}>
+                    <span className="btn btn-sm float-end">
+                      Edit <EditOutlined className="text-warning" />
+                    </span>
+                  </Link>
+                </div>
               ))}
             </Card>
           </div>
