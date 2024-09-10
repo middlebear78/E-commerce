@@ -12,6 +12,7 @@ import ForgotPassword from "./screens/authScreens/ForgotPassword";
 import AdminDashboard from "./screens/adminScreens/AdminDashboard";
 import CreateCategory from "./screens/adminScreens/category/CreateCategory";
 import UpdateCategory from "./screens/adminScreens/category/UpdateCategory";
+import CreateSubCategory from "./screens/adminScreens/subcategory/CreateSubCategory";
 
 import UserPrivateRoute from "./components/routes/UserPrivateRoute";
 import AdminPrivateRoute from "./components/routes/AdminPrivateRoute";
@@ -90,6 +91,10 @@ function App() {
         <Route
           path="/admin/category/:slug"
           element={<AdminPrivateRoute element={<UpdateCategory />} />}
+        />
+        <Route
+          path="/admin/subcategory"
+          element={<AdminPrivateRoute element={<CreateSubCategory />} />}
         />
       </Routes>
     </>

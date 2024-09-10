@@ -54,7 +54,7 @@ function AdminNav() {
           <Link to="/admin/category">Category</Link>
         </Menu.Item>
         <Menu.Item key="5" icon={<MenuUnfoldOutlined />}>
-          <Link to="/admin/sub">Sub Category</Link>
+          <Link to="/admin/subcategory">Sub Category</Link>
         </Menu.Item>
         <Menu.Item key="6" icon={<TagsFilled />}>
           <Link to="/admin/coupons">Coupons</Link>

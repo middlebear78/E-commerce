@@ -49,7 +49,7 @@ exports.update = async (req, res) => {
           slug: req.params.slug,
         },
         { name, slug: slugify(name) },
-        { new: true } // will send only the json response of the updated category .....
+        { new: true } // will send only the json response of the updated sub category .....
       )
       .exec();
     res.json(updated);
