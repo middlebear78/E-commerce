@@ -7,41 +7,55 @@ import {
   getOneCategory,
 } from "../../../services/categoryService/categoryService";
 import { useSelector } from "react-redux";
-import CreateCategoryForm from "../../../components/forms/CreateCategoryForm";
+import UpdateCategoryForm from "../../../components/forms/UpdateCategoryForm";
 import { useNavigate, useParams } from "react-router-dom";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import Notify from "../../../utils/notify";
 
 function UpdateCategory() {
   const { user } = useSelector((state) => ({ ...state }));
   const [name, setName] = useState("");
+  const [initialName, setInitialName] = useState("");
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState([]);
   const [form] = Form.useForm(); // Create form instance here
-  const params = useParams();
+  const { slug } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(params);
-  }, []);
+    loadCategory();
+  }, [slug]);
 
-  //   const handleSubmit = (values) => {
-  //     setLoading(true);
-  //     createCategory({ name: values.categoryName }, user.token)
-  //       .then((res) => {
-  //         setLoading(false);
-  //         notify.success(`${res.data.name} is created.`);
-  //         setName(""); // Reset name state after successful creation
-  //         form.resetFields(); // Reset form fieldscategoriesList(); // Refresh the categories list
-  //       })
-  //       .catch((err) => {
-  //         setLoading(false);
-  //         if (err.response && err.response.status === 400) {
-  //           notify.error(err.response.data);
-  //         } else {
-  //           notify.error("An unexpected error occurred.");
-  //         }
-  //       });
-  //   };
+  const loadCategory = () =>
+    getOneCategory(slug)
+      .then((res) => {
+        setInitialName(res.data.name);
+        setName(res.data.name);
+
+        form.setFieldsValue({ categoryName: res.data.name });
+      })
+      .catch((err) => {
+        Notify.error("Failed to load category.");
+        console.log(err);
+      });
+
+  const handleSubmit = (values) => {
+    setLoading(true);
+    updateCategory(slug, { name: values.categoryName }, user.token)
+      .then((res) => {
+        setLoading(false);
+        notify.success(`${res.data.name} is updated.`);
+        setName(""); // Reset name state after successful update
+        form.resetFields(); // Reset form fields
+        navigate("/admin/category"); // Navigate to categories list
+      })
+      .catch((err) => {
+        setLoading(false);
+        if (err.response && err.response.status === 400) {
+          notify.error(err.response.data);
+        } else {
+          notify.error("An unexpected error occurred.");
+        }
+      });
+  };
 
   return (
     <div className="container-fluid">
@@ -59,13 +73,13 @@ function UpdateCategory() {
                 margin: "100px auto 0 auto",
               }}
             >
-              {/* Passing the form instance to CreateCategoryForm */}
-              <CreateCategoryForm
-                // handleSubmit={handleSubmit}
+              <UpdateCategoryForm
+                handleSubmit={handleSubmit}
                 name={name}
                 setName={setName}
                 loading={loading}
-                form={form} // Passing the form instance here
+                form={form}
+                currentCategory={initialName}
               />
               <hr />
             </Card>
