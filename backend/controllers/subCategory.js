@@ -1,24 +1,23 @@
-const subCategory = require("../models/subCategory");
+const SubCategory = require("../models/subCategory"); // Capitalized to follow common convention for models
 const slugify = require("slugify");
 
 exports.create = async (req, res) => {
   try {
     const { name } = req.body;
-    const subCategory = await new subCategory({
+    const subCategory = await new SubCategory({
       name,
       slug: slugify(name),
     }).save();
     res.json(subCategory);
   } catch (err) {
     console.log(err);
-    res.status(400).send("Create sub Category Failed");
+    res.status(400).send("Create Sub Category Failed");
   }
 };
 
 exports.list = async (req, res) => {
   try {
-    const subCategories = await subCategory
-      .find({})
+    const subCategories = await SubCategory.find({}) // Use capitalized model here
       .sort({ createdAt: -1 })
       .exec();
     res.json(subCategories);
@@ -30,9 +29,7 @@ exports.list = async (req, res) => {
 
 exports.read = async (req, res) => {
   try {
-    let subCategory = await subCategory
-      .findOne({ slug: req.params.slug })
-      .exec();
+    let subCategory = await SubCategory.findOne({ slug: req.params.slug }).exec(); // Capitalized model
     res.json(subCategory);
   } catch (err) {
     console.log(err);
@@ -41,34 +38,28 @@ exports.read = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-  const { name } = req.body; // hp to hewlit packard
+  const { name } = req.body;
   try {
-    const updated = await subCategory
-      .findOneAndUpdate(
-        {
-          slug: req.params.slug,
-        },
-        { name, slug: slugify(name) },
-        { new: true } // will send only the json response of the updated sub category .....
-      )
-      .exec();
+    const updated = await SubCategory.findOneAndUpdate(
+      { slug: req.params.slug },
+      { name, slug: slugify(name) },
+      { new: true }
+    ).exec();
     res.json(updated);
   } catch (err) {
     console.log(err);
-    err.status(400).send("Failed to Update Sub Category");
+    res.status(400).send("Failed to Update Sub Category");
   }
 };
 
 exports.remove = async (req, res) => {
   try {
-    const deleted = await subCategory
-      .findOneAndDelete({
-        slug: req.params.slug,
-      })
-      .exec();
+    const deleted = await SubCategory.findOneAndDelete({
+      slug: req.params.slug,
+    }).exec();
     res.json(deleted);
   } catch (err) {
     console.log(err);
-    err.status(400).send("Failed to Delete sub Category");
+    res.status(400).send("Failed to Delete Sub Category");
   }
 };
