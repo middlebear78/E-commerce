@@ -1,0 +1,33 @@
+/* AdminNav.module.css */
+
+.navContainer {
+  width: 180px;
+  /* height: 100vh; Full viewport height */
+  background-color: #f0f2f5; /* Light background color */
+  position: fixed; /* Fix position to keep it in place */
+  top: 0;
+  left: 0;
+  overflow: hidden; /* Hide scrollbars if needed */
+}
+
+.menu {
+  height: 100%; /* Full height of the container */
+  border-right: 1px solid #d9d9d9; /* Border on the right side */
+}
+
+.menuItem {
+  padding: 16px;
+}
+
+.menuItem:hover {
+  background-color: #e6f7ff; /* Highlight color on hover */
+}
+
+.menuItem a {
+  text-decoration: none; /* Remove underline from links */
+  color: #000; /* Default text color */
+}
+
+.menuItem a:hover {
+  color: #1890ff; /* Change text color on link hover */
+}

@@ -11,6 +11,7 @@ import {
   TagsFilled,
   LockOutlined,
 } from "@ant-design/icons";
+import styles from "./AdminNav.module.css"; // Import the CSS module
 
 function AdminNav() {
   const location = useLocation();
@@ -24,7 +25,7 @@ function AdminNav() {
       return "3";
     } else if (location.pathname.includes("/admin/category")) {
       return "4";
-    } else if (location.pathname.includes("/admin/sub")) {
+    } else if (location.pathname.includes("/admin/subcategory")) {
       return "5";
     } else if (location.pathname.includes("/admin/coupons")) {
       return "6";
@@ -35,31 +36,48 @@ function AdminNav() {
   };
 
   return (
-    <div style={{ width: 180 }}>
+    <div className={styles.navContainer}>
       <Menu
         mode="inline"
         theme="light"
         defaultSelectedKeys={[getSelectedKey()]}
+        className={styles.menu}
       >
-        <Menu.Item key="1" icon={<DashboardOutlined />}>
+        <Menu.Item
+          key="1"
+          icon={<DashboardOutlined />}
+          className={styles.menuItem}
+        >
           <Link to="/admin/dashboard">Dashboard</Link>
         </Menu.Item>
-        <Menu.Item key="2" icon={<ProductOutlined />}>
+        <Menu.Item
+          key="2"
+          icon={<ProductOutlined />}
+          className={styles.menuItem}
+        >
           <Link to="/admin/product">Product</Link>
         </Menu.Item>
-        <Menu.Item key="3" icon={<ProductFilled />}>
+        <Menu.Item key="3" icon={<ProductFilled />} className={styles.menuItem}>
           <Link to="/admin/products">Products</Link>
         </Menu.Item>
-        <Menu.Item key="4" icon={<MenuFoldOutlined />}>
+        <Menu.Item
+          key="4"
+          icon={<MenuFoldOutlined />}
+          className={styles.menuItem}
+        >
           <Link to="/admin/category">Category</Link>
         </Menu.Item>
-        <Menu.Item key="5" icon={<MenuUnfoldOutlined />}>
+        <Menu.Item
+          key="5"
+          icon={<MenuUnfoldOutlined />}
+          className={styles.menuItem}
+        >
           <Link to="/admin/subcategory">Sub Category</Link>
         </Menu.Item>
-        <Menu.Item key="6" icon={<TagsFilled />}>
+        <Menu.Item key="6" icon={<TagsFilled />} className={styles.menuItem}>
           <Link to="/admin/coupons">Coupons</Link>
         </Menu.Item>
-        <Menu.Item key="7" icon={<LockOutlined />}>
+        <Menu.Item key="7" icon={<LockOutlined />} className={styles.menuItem}>
           <Link to="/user/password">Password</Link>
         </Menu.Item>
       </Menu>

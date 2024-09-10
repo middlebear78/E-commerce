@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import styles from "./Header.module.css";
 
 function Header() {
   const dispatch = useDispatch();
@@ -36,7 +37,12 @@ function Header() {
   };
 
   return (
-    <Row justify="space-between" align="middle" style={{ width: "100%" }}>
+    <Row
+      className={styles.header}
+      justify="space-between"
+      align="middle"
+      style={{ width: "100%" }}
+    >
       <Col flex="1">
         <Menu
           onClick={handleClick}
