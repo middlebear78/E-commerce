@@ -104,7 +104,7 @@ function CreateCategory() {
                 loading={loading}
                 form={form} // im Passing the form instance here
               />
-              {/* step 2  - search field */}
+              
               <SearchFilter keyWord={keyWord} setKeyword={setKeyword} />
 
               <hr />
