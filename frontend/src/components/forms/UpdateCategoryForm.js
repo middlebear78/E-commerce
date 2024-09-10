@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Form, Button, Input } from "antd";
 
 const UpdateCategoryForm = ({
@@ -9,11 +9,6 @@ const UpdateCategoryForm = ({
   form,
   currentCategory,
 }) => {
-  // Set form initial values when currentCategory changes
-  useEffect(() => {
-    form.setFieldsValue({ categoryName: currentCategory });
-  }, [currentCategory, form]);
-
   return (
     <Form
       form={form}
@@ -21,11 +16,12 @@ const UpdateCategoryForm = ({
       labelCol={{ span: 24 }}
       wrapperCol={{ span: 24 }}
       style={{ maxWidth: "100%" }}
+      initialValues={{ remember: true }}
       onFinish={handleSubmit}
       autoComplete="off"
     >
       <Form.Item
-        label={`Update category: ${currentCategory}`} // Dynamic label with currentCategory
+        label={`Category Name: ${currentCategory}`} // Static label with category name
         name="categoryName"
         rules={[
           {
@@ -36,7 +32,7 @@ const UpdateCategoryForm = ({
       >
         <Input
           placeholder="Enter new category name"
-          value={name} // Controlled input
+          value={name}
           onChange={(e) => setName(e.target.value)}
         />
       </Form.Item>
@@ -48,7 +44,7 @@ const UpdateCategoryForm = ({
           style={{ width: "100%" }}
           disabled={!name || loading}
         >
-          {loading ? "Saving..." : "Save new Category"}
+          {loading ? "Saving..." : "Save Category"}
         </Button>
       </Form.Item>
     </Form>

@@ -43,9 +43,9 @@ function UpdateCategory() {
       .then((res) => {
         setLoading(false);
         notify.success(`${res.data.name} is updated.`);
-        setName(""); // Reset name state after successful update
-        form.resetFields(); // Reset form fields
-        navigate("/admin/category"); // Navigate to categories list
+        setName(""); 
+        form.resetFields(); 
+        navigate("/admin/category"); 
       })
       .catch((err) => {
         setLoading(false);

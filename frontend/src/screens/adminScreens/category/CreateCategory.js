@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, Form, Card } from "antd";
+import { Row, Col, Form, Card, Input } from "antd";
 import AdminNav from "../../../components/nav/AdminNav";
 import notify from "../../../utils/notify";
 import {
@@ -10,8 +10,13 @@ import {
 import { useSelector } from "react-redux";
 import CreateCategoryForm from "../../../components/forms/CreateCategoryForm";
 import { Link } from "react-router-dom";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  DeleteOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import Notify from "../../../utils/notify";
+import SearchFilter from "../../../components/forms/SearchFilter";
 
 function CreateCategory() {
   const { user } = useSelector((state) => ({ ...state }));
@@ -19,6 +24,7 @@ function CreateCategory() {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [form] = Form.useForm(); // Create form instance here
+  const [keyWord, setKeyword] = useState("");
 
   useEffect(() => {
     categoriesList();
@@ -39,9 +45,9 @@ function CreateCategory() {
       .then((res) => {
         setLoading(false);
         notify.success(`${res.data.name} is created.`);
-        setName(""); // Reset name state after successful creation
-        form.resetFields(); // Reset form fields
-        categoriesList(); // Refresh the categories list
+        setName("");
+        form.resetFields();
+        categoriesList();
       })
       .catch((err) => {
         setLoading(false);
@@ -71,6 +77,9 @@ function CreateCategory() {
     }
   };
 
+  const SearchedCategory = (keyWord) => (category) =>
+    category.name.toLowerCase().includes(keyWord);
+
   return (
     <div className="container-fluid">
       <Row gutter={16}>
@@ -95,8 +104,12 @@ function CreateCategory() {
                 loading={loading}
                 form={form} // im Passing the form instance here
               />
+              {/* step 2  - search field */}
+              <SearchFilter keyWord={keyWord} setKeyword={setKeyword} />
+
               <hr />
-              {categories.map((category) => (
+
+              {categories.filter(SearchedCategory(keyWord)).map((category) => (
                 <div
                   className="alert alert-secondary"
                   key={category._id}
