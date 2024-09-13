@@ -63,6 +63,7 @@ export default function LoginScreen() {
 
       // Notify.success(`Login Complete. Welcome.`);
     } catch (error) {
+      console.log(error.code);
       console.error("Login failed:", error.message);
       Notify.error(error.message);
       setLoading(false);

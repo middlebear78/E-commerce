@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, Form, Card, Input } from "antd";
+import { Row, Col, Form, Card } from "antd";
 import AdminNav from "../../../components/nav/AdminNav";
 import notify from "../../../utils/notify";
 import {
@@ -27,22 +27,26 @@ function CreateCategory() {
   const [keyWord, setKeyword] = useState("");
 
   useEffect(() => {
+    console.log("Fetching categories...");
     categoriesList();
   }, []);
 
   const categoriesList = async () => {
     try {
       const response = await getAllCategories();
+      console.log("Categories fetched:", response.data);
       setCategories(response.data);
     } catch (err) {
-      console.log(err);
+      console.log("Error fetching categories:", err);
     }
   };
 
   const handleSubmit = (values) => {
+    console.log("Form submitted with values:", values);
     setLoading(true);
     createCategory({ name: values.categoryName }, user.token)
       .then((res) => {
+        console.log("Category created successfully:", res.data);
         setLoading(false);
         notify.success(`${res.data.name} is created.`);
         setName("");
@@ -50,6 +54,7 @@ function CreateCategory() {
         categoriesList();
       })
       .catch((err) => {
+        console.log("Error creating category:", err);
         setLoading(false);
         if (err.response && err.response.status === 400) {
           notify.error(err.response.data);
@@ -58,17 +63,20 @@ function CreateCategory() {
         }
       });
   };
+
   const handleDelete = async (slug) => {
     const answer = window.confirm("Delete Category?");
     if (answer) {
       try {
+        console.log("Deleting category with slug:", slug);
         setLoading(true);
         const response = await deleteCategory(slug, user.token);
+        console.log("Category deleted:", response.data);
         Notify.success(`Category ${response.data.name} has been deleted.`);
         categoriesList();
       } catch (err) {
-        if (err.response.status === 400) {
-          console.error("Error deleting category:", err.response.data);
+        console.log("Error deleting category:", err);
+        if (err.response && err.response.status === 400) {
           Notify.error("Failed to delete category");
         }
       } finally {
@@ -102,7 +110,7 @@ function CreateCategory() {
                 name={name}
                 setName={setName}
                 loading={loading}
-                form={form} // im Passing the form instance here
+                form={form} // Passing the form instance here
               />
 
               <SearchFilter keyWord={keyWord} setKeyword={setKeyword} />

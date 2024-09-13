@@ -3,10 +3,15 @@ const slugify = require("slugify");
 
 exports.create = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name, parent_category } = req.body;
+    if (!parent_category) {
+      return res.status(400).json({ error: "Category is required" });
+    }
+
     const subCategory = await new SubCategory({
       name,
       slug: slugify(name),
+      parent_category
     }).save();
     res.json(subCategory);
   } catch (err) {
@@ -29,7 +34,9 @@ exports.list = async (req, res) => {
 
 exports.read = async (req, res) => {
   try {
-    let subCategory = await SubCategory.findOne({ slug: req.params.slug }).exec(); // Capitalized model
+    let subCategory = await SubCategory.findOne({
+      slug: req.params.slug,
+    }).exec(); // Capitalized model
     res.json(subCategory);
   } catch (err) {
     console.log(err);
