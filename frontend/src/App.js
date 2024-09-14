@@ -13,6 +13,7 @@ import AdminDashboard from "./screens/adminScreens/AdminDashboard";
 import CreateCategory from "./screens/adminScreens/category/CreateCategory";
 import UpdateCategory from "./screens/adminScreens/category/UpdateCategory";
 import CreateSubCategory from "./screens/adminScreens/subcategory/CreateSubCategory";
+import CreateProduct from "./screens/adminScreens/product/CreateProduct";
 
 import UserPrivateRoute from "./components/routes/UserPrivateRoute";
 import AdminPrivateRoute from "./components/routes/AdminPrivateRoute";
@@ -95,6 +96,10 @@ function App() {
         <Route
           path="/admin/subcategory"
           element={<AdminPrivateRoute element={<CreateSubCategory />} />}
+        />
+        <Route
+          path="/admin/product"
+          element={<AdminPrivateRoute element={<CreateProduct />} />}
         />
       </Routes>
     </>
