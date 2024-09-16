@@ -28,16 +28,16 @@ const productSchema = new Schema(
       trim: true,
       maxlength: 32,
     },
-    category: {
-      type: Schema.Types.ObjectId,
-      ref: "category",
-    },
-    subcategories: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "subCategory",
-      },
-    ],
+    // category: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "category",
+    // },
+    // subcategories: [
+    //   {
+    //     type: Schema.Types.ObjectId,
+    //     ref: "subCategory",
+    //   },
+    // ],
     quantity: {
       type: Number,
     },
@@ -45,9 +45,9 @@ const productSchema = new Schema(
       type: Number,
       default: 0,
     },
-    images: {
-      type: Array,
-    },
+    // images: {
+    //   type: Array,
+    // },
     shipping: {
       type: String,
       enum: ["Yes", "No"],
