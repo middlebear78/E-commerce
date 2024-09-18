@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col, Card, Form } from "antd";
 import AdminNav from "../../../components/nav/AdminNav";
 import notify from "../../../utils/notify";
 import { useSelector } from "react-redux";
 import { createProduct } from "../../../services/productService/productService";
 import CreateProductForm from "../../../components/forms/CreateProductForm";
+import { getAllCategories } from "../../../services/categoryService/categoryService";
 
 const initialState = {
   title: "",
@@ -31,21 +32,45 @@ function CreateProduct() {
 
   const [form] = Form.useForm();
 
-  // Handle input change
-  const handleChange = (e) => {
-    const { name, value } = e.target || e;
-    setValues({ ...values, [name]: value });
+  useEffect(() => {
+    console.log("Fetching categories...");
+    categoriesList();
+  }, []);
+
+  const categoriesList = async () => {
+    try {
+      const response = await getAllCategories();
+      console.log("Categories fetched:", response.data);
+      setValues((prevValues) => ({
+        ...prevValues,
+        categories: response.data,
+      }));
+    } catch (err) {
+      console.log("Error fetching categories:", err);
+    }
   };
 
-  // Handle form submission
+  const handleChange = (e) => {
+    const { name, value } = e.target || e;
+    setValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
+
   const handleSubmit = () => {
     setLoading(true);
     createProduct(values, user.token)
       .then((res) => {
         setLoading(false);
         notify.success(`${res.data.title} is created`);
-        setValues(initialState);
         form.resetFields();
+        categoriesList();
+        
+        setValues((prevValues) => ({
+          ...initialState,
+          categories: prevValues.categories,
+        }));
       })
       .catch((err) => {
         setLoading(false);
@@ -77,6 +102,7 @@ function CreateProduct() {
                 handleSubmit={handleSubmit}
                 colors={colors}
                 brands={brands}
+                categories={values.categories}
               />
             </Card>
           </div>

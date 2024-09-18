@@ -9,6 +9,7 @@ const CreateProductForm = ({
   handleSubmit,
   colors,
   brands,
+  categories,
 }) => {
   const {
     title,
@@ -35,6 +36,7 @@ const CreateProductForm = ({
       initialValues={{ remember: true }}
       onFinish={handleSubmit}
       autoComplete="off"
+      categories={categories}
     >
       <Form.Item
         label="Title"
@@ -77,13 +79,31 @@ const CreateProductForm = ({
         />
       </Form.Item>
 
-      <Form.Item label="Category" name="category">
-        <Input
+      <Form.Item
+        label="Category"
+        name="category"
+        rules={[{ required: true, message: "Please add product category" }]}
+      >
+        <Select
           name="category"
-          placeholder="Enter product category"
-          onChange={handleChange}
+          onChange={(value) =>
+            handleChange({ target: { name: "category", value } })
+          }
           value={category}
-        />
+          placeholder="Select a category"
+        >
+          {categories && categories.length > 0 ? (
+            categories.map((c) => (
+              <Select.Option key={c._id} value={c.value}>
+                {c.name}
+              </Select.Option>
+            ))
+          ) : (
+            <Select.Option disabled value="">
+              No categories available
+            </Select.Option>
+          )}
+        </Select>
       </Form.Item>
 
       <Form.Item label="Sub Category" name="subcategory">
