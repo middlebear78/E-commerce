@@ -103,26 +103,28 @@ const CreateProductForm = ({
         </Select>
       </Form.Item>
 
-      <Form.Item label="Sub Category" name="subcategory">
-        <Select
-          mode="multiple"
-          onChange={(value) => setValues({ ...values, subcategory: value })}
-          placeholder="Select a category"
-          value={subcategory}
-        >
-          {subOptions && subOptions.length > 0 ? (
-            subOptions.map((o) => (
-              <Select.Option key={o._id} value={o._id}>
-                {o.name}
+      {showSub && (
+        <Form.Item label="Sub Category" name="subcategory">
+          <Select
+            mode="multiple"
+            onChange={(value) => setValues({ ...values, subcategory: value })}
+            placeholder="Select a category"
+            value={subcategory}
+          >
+            {subOptions && subOptions.length > 0 ? (
+              subOptions.map((o) => (
+                <Select.Option key={o._id} value={o._id}>
+                  {o.name}
+                </Select.Option>
+              ))
+            ) : (
+              <Select.Option disabled value="">
+                No sub-categories available
               </Select.Option>
-            ))
-          ) : (
-            <Select.Option disabled value="">
-              No sub-categories available
-            </Select.Option>
-          )}
-        </Select>
-      </Form.Item>
+            )}
+          </Select>
+        </Form.Item>
+      )}
 
       <Form.Item
         label="Quantity"

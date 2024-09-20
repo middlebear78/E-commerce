@@ -67,23 +67,18 @@ function CreateProduct() {
   const handleCategoryChange = async (categoryId) => {
     try {
       console.log("Selected Category ID:", categoryId);
-
-      setValues({ ...values, category: categoryId });
-
-      // Fetch the subcategories based on the selected category
+      setValues({ ...values, category: categoryId, subcategory: [] });
       const res = await getCategorySubs(categoryId);
-      console.log("Response from API:", res); // Log the entire response
-
-      // Check if subcategories were found
+      console.log("Response from API:", res);
       if (res.data.length === 0) {
         console.warn("No subcategories found for this category.");
+        setShowSubs(false);
       } else {
         console.log("Subcategories options by category id:", res.data);
-        // Update the subOptions state with the fetched data
         setSubOptions(res.data);
+        setShowSubs(true);
       }
     } catch (error) {
-      // Handle errors (e.g., log the error or display a message)
       console.error("Error fetching subcategories:", error);
     }
   };
