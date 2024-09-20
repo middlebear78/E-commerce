@@ -16,3 +16,6 @@ export const updateCategory = (slug, category) =>
 
 // Create a new category
 export const createCategory = (category) => api.post("/category", category);
+
+// get all sub-categories for category using category id
+export const getCategorySubs = (_id) => api.get(`/category/subs/${_id}`);

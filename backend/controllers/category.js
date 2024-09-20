@@ -1,5 +1,7 @@
 const Category = require("../models/category");
 const slugify = require("slugify");
+const sub = require("../models/subCategory");
+const mongoose = require("mongoose");
 
 exports.create = async (req, res) => {
   try {
@@ -45,7 +47,7 @@ exports.update = async (req, res) => {
     res.json(updated);
   } catch (err) {
     console.log(err);
-    err.status(400).send("Failed to Update Category");
+    res.status(400).send("Failed to Update Category");
   }
 };
 
@@ -57,6 +59,21 @@ exports.remove = async (req, res) => {
     res.json(deleted);
   } catch (err) {
     console.log(err);
-    err.status(400).send("Failed to Delete Category");
+    res.status(400).send("Failed to Delete Category");
+  }
+};
+
+exports.getSubs = async (req, res) => {
+  try {
+    const parentId = req.params._id
+    const subs = await sub.find({ parent_category: parentId });
+    console.log("Fetched subs:", subs);
+    return res.json(subs);
+    
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(500)
+      .json({ error: "An error occurred while fetching subcategories." });
   }
 };

@@ -6,10 +6,14 @@ const CreateProductForm = ({
   values,
   loading,
   handleChange,
+  handleCategoryChange,
   handleSubmit,
   colors,
   brands,
   categories,
+  subOptions,
+  showSub,
+  setValues,
 }) => {
   const {
     title,
@@ -82,19 +86,12 @@ const CreateProductForm = ({
       <Form.Item
         label="Category"
         name="category"
-        rules={[{ required: true, message: "Please add product category" }]}
+        rules={[{ required: true, message: "Please select a category" }]}
       >
-        <Select
-          name="category"
-          onChange={(value) =>
-            handleChange({ target: { name: "category", value } })
-          }
-          value={category}
-          placeholder="Select a category"
-        >
+        <Select onChange={handleCategoryChange} placeholder="Select a category">
           {categories && categories.length > 0 ? (
             categories.map((c) => (
-              <Select.Option key={c._id} value={c.value}>
+              <Select.Option key={c._id} value={c._id}>
                 {c.name}
               </Select.Option>
             ))
@@ -107,12 +104,24 @@ const CreateProductForm = ({
       </Form.Item>
 
       <Form.Item label="Sub Category" name="subcategory">
-        <Input
-          name="subcategory"
-          placeholder="Enter product subcategory"
-          onChange={handleChange}
+        <Select
+          mode="multiple"
+          onChange={(value) => setValues({ ...values, subcategory: value })}
+          placeholder="Select a category"
           value={subcategory}
-        />
+        >
+          {subOptions && subOptions.length > 0 ? (
+            subOptions.map((o) => (
+              <Select.Option key={o._id} value={o._id}>
+                {o.name}
+              </Select.Option>
+            ))
+          ) : (
+            <Select.Option disabled value="">
+              No sub-categories available
+            </Select.Option>
+          )}
+        </Select>
       </Form.Item>
 
       <Form.Item
