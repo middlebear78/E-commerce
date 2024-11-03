@@ -117,8 +117,10 @@ function CreateProduct() {
                                 margin: "100px auto 0 auto",
                             }}
                         >
+                            {JSON.stringify(values.images)}
+                            
                             <div className="p-3">
-                                <FileUpload />
+                                <FileUpload values={values} setValues={setValues} setLoading={setLoading} />
                             </div>
 
                             <CreateProductForm
