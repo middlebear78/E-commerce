@@ -2,13 +2,14 @@ import React from "react";
 import Resizer from "react-image-file-resizer";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { Avatar, Space } from "antd";
+import { Avatar, Space, Badge } from "antd";
+
 
 const FileUpload = ({ values, setValues, setLoading }) => {
     const { user } = useSelector((state) => ({ ...state }));
 
     const handleFileChange = async (event) => {
-        const files = Array.from(event.target.files).filter((file) => file.type.startsWith("image/")); 
+        const files = Array.from(event.target.files).filter((file) => file.type.startsWith("image/"));
 
         console.log("User token:", user.token);
         console.log("API Endpoint:", process.env.REACT_APP_API);
@@ -69,24 +70,56 @@ const FileUpload = ({ values, setValues, setLoading }) => {
         }
     };
 
+    const handleRemove = async (public_id) => {
+        setLoading(true);
+        try {
+            // console.log("remove image:", public_id);
+            await axios.post(
+                `${process.env.REACT_APP_API}/remove_image`,
+                { public_id },
+                {
+                    headers: {
+                        authtoken: user ? user.token : "",
+                    },
+                }
+            );
+            const { images } = values;
+            let filteredImages = images.filter((image) => {
+                return image.public_id !== public_id;
+            });
+            setValues({ ...values, images: filteredImages });
+        } catch (err) {
+            console.log(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <>
             <div className="row">
                 <Space direction="horizontal" size={16}>
                     {values.images &&
                         values.images.map((image) => (
-                            <Avatar
+                            <Badge
+                                style={{ cursor: "pointer" }}
+                                count="X"
                                 key={image.public_id}
-                                src={image.url}
-                                size={{
-                                    xs: 24,
-                                    sm: 32,
-                                    md: 40,
-                                    lg: 64,
-                                    xl: 80,
-                                    xxl: 100,
-                                }}
-                            />
+                                onClick={() => handleRemove(image.public_id)}
+                            >
+                                <Avatar
+                                    shape="square"
+                                    src={image.url}
+                                    size={{
+                                        xs: 24,
+                                        sm: 32,
+                                        md: 40,
+                                        lg: 64,
+                                        xl: 80,
+                                        xxl: 100,
+                                    }}
+                                />
+                            </Badge>
                         ))}
                 </Space>
             </div>

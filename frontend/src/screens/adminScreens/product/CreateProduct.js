@@ -7,6 +7,7 @@ import { createProduct } from "../../../services/productService/productService";
 import CreateProductForm from "../../../components/forms/CreateProductForm";
 import { getAllCategories, getCategorySubs } from "../../../services/categoryService/categoryService";
 import FileUpload from "../../../components/forms/FileUpload";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const initialState = {
     title: "",
@@ -110,7 +111,7 @@ function CreateProduct() {
                 <Col span={18}>
                     <div className="content">
                         <Card
-                            title={loading ? "Loading..." : "Create Product"}
+                            title={loading ? <LoadingOutlined className="text-danger h1" /> : "Create Product"}
                             style={{
                                 width: "100%",
                                 maxWidth: 1200,
@@ -118,7 +119,7 @@ function CreateProduct() {
                             }}
                         >
                             {JSON.stringify(values.images)}
-                            
+
                             <div className="p-3">
                                 <FileUpload values={values} setValues={setValues} setLoading={setLoading} />
                             </div>
