@@ -6,7 +6,8 @@ export const getOneProduct = (slug) => api.get(`/product/${slug}`);
 
 export const deleteProduct = (slug) => api.delete(`/product/${slug}`);
 
-export const updateProduct = (slug, product) =>
-  api.put(`/product/${slug}`, product);
+export const updateProduct = (slug, product) => api.put(`/product/${slug}`, product);
 
 export const createProduct = (product) => api.post("/product", product);
+
+export const getProductsByCount = (count) => api.get(`/products/${count}`);
