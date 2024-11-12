@@ -29,81 +29,59 @@ import { useDispatch } from "react-redux";
 import { onAuthStateChanged } from "firebase/auth";
 
 import { currentUser } from "./services/userService/userService";
+import AllProducts from "./screens/adminScreens/product/AllProducts";
 
 function App() {
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-  // to check firebase auth state
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const idTokenResult = await user.getIdTokenResult();
-        currentUser(idTokenResult.token)
-          .then((res) => {
-            console.log("CREATE OR UPDATE RES", res);
-            dispatch({
-              type: "USER_LOGGED_IN",
-              payload: {
-                name: res.data.name,
-                email: res.data.email,
-                token: idTokenResult.token,
-                role: res.data.role,
-                _id: res.data._id,
-              },
-            });
-          })
-          .catch((err) => console.log(err));
-      }
-    });
-    // cleanup
-    return () => unsubscribe();
-  }, [dispatch, auth]);
+    // to check firebase auth state
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const idTokenResult = await user.getIdTokenResult();
+                currentUser(idTokenResult.token)
+                    .then((res) => {
+                        console.log("CREATE OR UPDATE RES", res);
+                        dispatch({
+                            type: "USER_LOGGED_IN",
+                            payload: {
+                                name: res.data.name,
+                                email: res.data.email,
+                                token: idTokenResult.token,
+                                role: res.data.role,
+                                _id: res.data._id,
+                            },
+                        });
+                    })
+                    .catch((err) => console.log(err));
+            }
+        });
+        // cleanup
+        return () => unsubscribe();
+    }, [dispatch, auth]);
 
-  return (
-    <>
-      <Notify.Toaster />
-      <Header />
-      <Routes>
-        <Route path="/" element={<HomeScreen />} />
-        <Route path="/login" element={<LoginScreen />} />
-        <Route path="/register" element={<RegisterScreen />} />
-        <Route path="/register/complete" element={<RegisterCompleteScreen />} />
-        <Route path="/forgot/password" element={<ForgotPassword />} />
-        <Route
-          path="/user/history"
-          element={<UserPrivateRoute element={<HistoryScreen />} />}
-        />
-        <Route
-          path="/user/wishlist"
-          element={<UserPrivateRoute element={<WishlistScreen />} />}
-        />
-        <Route
-          path="/user/password"
-          element={<UserPrivateRoute element={<PasswordScreen />} />}
-        />
-        <Route
-          path="/admin/dashboard"
-          element={<AdminPrivateRoute element={<AdminDashboard />} />}
-        />
-        <Route
-          path="/admin/category"
-          element={<AdminPrivateRoute element={<CreateCategory />} />}
-        />
-        <Route
-          path="/admin/category/:slug"
-          element={<AdminPrivateRoute element={<UpdateCategory />} />}
-        />
-        <Route
-          path="/admin/subcategory"
-          element={<AdminPrivateRoute element={<CreateSubCategory />} />}
-        />
-        <Route
-          path="/admin/product"
-          element={<AdminPrivateRoute element={<CreateProduct />} />}
-        />
-      </Routes>
-    </>
-  );
+    return (
+        <>
+            <Notify.Toaster />
+            <Header />
+            <Routes>
+                <Route path="/" element={<HomeScreen />} />
+                <Route path="/login" element={<LoginScreen />} />
+                <Route path="/register" element={<RegisterScreen />} />
+                <Route path="/register/complete" element={<RegisterCompleteScreen />} />
+                <Route path="/forgot/password" element={<ForgotPassword />} />
+                <Route path="/user/history" element={<UserPrivateRoute element={<HistoryScreen />} />} />
+                <Route path="/user/wishlist" element={<UserPrivateRoute element={<WishlistScreen />} />} />
+                <Route path="/user/password" element={<UserPrivateRoute element={<PasswordScreen />} />} />
+                <Route path="/admin/dashboard" element={<AdminPrivateRoute element={<AdminDashboard />} />} />
+                <Route path="/admin/category" element={<AdminPrivateRoute element={<CreateCategory />} />} />
+                <Route path="/admin/category/:slug" element={<AdminPrivateRoute element={<UpdateCategory />} />} />
+                <Route path="/admin/subcategory" element={<AdminPrivateRoute element={<CreateSubCategory />} />} />
+                <Route path="/admin/product" element={<AdminPrivateRoute element={<CreateProduct />} />} />
+                <Route path="/admin/products" element={<AdminPrivateRoute element={<AllProducts />} />} />
+            </Routes>
+        </>
+    );
 }
 
 export default App;
