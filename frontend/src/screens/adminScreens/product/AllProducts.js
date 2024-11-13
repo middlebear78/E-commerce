@@ -3,10 +3,14 @@ import { Row, Col } from "antd";
 import AdminNav from "../../../components/nav/AdminNav";
 import { getProductsByCount } from "../../../services/productService/productService";
 import AdminProductCard from "../../../components/cards/AdminProductCard";
+import { deleteProduct } from "../../../services/productService/productService";
+import notify from "../../../utils/notify";
+import { useSelector } from "react-redux";
 
 function AllProducts() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
+    const { user } = useSelector((state) => state); // Assuming user is directly under the state
 
     useEffect(() => {
         loadAllProducts();
@@ -25,6 +29,22 @@ function AllProducts() {
         }
     };
 
+    const handleDelete = async (slug) => {
+        setLoading(true);
+        let answer = window.confirm("Delete?");
+        if (answer) {
+            try {
+                const response = await deleteProduct(slug, user.token);
+                loadAllProducts();
+                notify.success(`Product: ${response.data.title} has been DELETED! `);
+            } catch (err) {
+                notify.error(`failed to DELETE product`);
+                console.log(err);
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
     return (
         <div className="container-fluid">
             <Row>
@@ -37,7 +57,7 @@ function AllProducts() {
                         <Row gutter={[16, 32]}>
                             {products.map((product) => (
                                 <Col xs={24} sm={12} md={8} lg={6} key={product._id}>
-                                    <AdminProductCard product={product} />
+                                    <AdminProductCard product={product} handleDelete={handleDelete} />
                                 </Col>
                             ))}
                         </Row>

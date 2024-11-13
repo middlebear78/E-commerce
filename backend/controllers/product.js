@@ -30,3 +30,13 @@ exports.listAll = async (req, res) => {
         res.status(500).json({ error: "Failed to fetch products" });
     }
 };
+
+exports.remove = async (req, res) => {
+    try {
+        const deleted = await Product.findOneAndDelete({ slug: req.params.slug }).exec();
+        res.json(deleted);
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({ error: "Failed to delete product" });
+    }
+};

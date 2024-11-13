@@ -1,11 +1,13 @@
 import React from "react";
 import { Card } from "antd";
+import noImage from "../../assets/images/no-image-icon-23500.jpg";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const { Meta } = Card;
 
-const AdminProductCard = ({ product }) => {
-    const { title, description, images } = product;
-    const imageUrl = images && images.length > 0 ? images[0].url : "/no-image-icon-23500.jpg";
+const AdminProductCard = ({ product, handleDelete }) => {
+    const { title, description, images, slug } = product;
+    const imageUrl = images && images.length > 0 ? images[0].url : noImage;
     return (
         <Card
             hoverable
@@ -22,6 +24,10 @@ const AdminProductCard = ({ product }) => {
                     }}
                 />
             }
+            actions={[
+                <EditOutlined className="text-warning" />,
+                <DeleteOutlined className="text-danger" onClick={() => handleDelete(slug)} />,
+            ]}
         >
             <Meta
                 title={title}
