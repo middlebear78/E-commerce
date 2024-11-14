@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 function AllProducts() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { user } = useSelector((state) => state); // Assuming user is directly under the state
+    const { user } = useSelector((state) => ({ ...state }));
 
     useEffect(() => {
         loadAllProducts();
