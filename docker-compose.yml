@@ -1,14 +1,18 @@
 # Development stack: MongoDB + Express backend + Create React App frontend.
-# Run everything with: docker compose up --build
+# Mongo runs in Docker with a persistent volume and is auto-seeded with the admin
+# user on first run (see ./mongo-seed), so a fresh machine works with no manual DB steps.
+# Run with: docker compose up --build
 
 services:
   mongo:
-    image: mongo:7
+    image: mongo:8
     restart: unless-stopped
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+      # Seed scripts run automatically the first time the data volume is empty.
+      - ./mongo-seed:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
       interval: 10s
@@ -22,8 +26,8 @@ services:
     env_file:
       - ./backend/.env
     environment:
-      # Overrides DATABASE from .env so the stack uses the local mongo container.
-      DATABASE: mongodb://mongo:27017/ecommerce
+      # Uses the mongo service in this stack; db name matches the app (ecom-uri).
+      DATABASE: mongodb://mongo:27017/ecom-uri
       PORT: "8000"
     ports:
       - "8000:8000"
