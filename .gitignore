@@ -23,6 +23,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/backend/config/fbserviceAccountKey.json
+# Firebase Admin service account key (secret) — keep config/ but never commit the key
+backend/config/*.json
 frontend/.env
 backend/.env

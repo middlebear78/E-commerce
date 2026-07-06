@@ -1,0 +1,58 @@
+# Development stack: MongoDB + Express backend + Create React App frontend.
+# Run everything with: docker compose up --build
+
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    # Loads CLOUDINARY_* (and anything else) from the existing backend/.env.
+    env_file:
+      - ./backend/.env
+    environment:
+      # Overrides DATABASE from .env so the stack uses the local mongo container.
+      DATABASE: mongodb://mongo:27017/ecommerce
+      PORT: "8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      # Bind-mount source for hot reload; the anonymous volume keeps the
+      # container's linux-built node_modules instead of the host's darwin ones.
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    environment:
+      # Read by the browser, so it points at the host-exposed backend port.
+      REACT_APP_API: http://localhost:8000/api
+      # Polling lets CRA/webpack detect file changes through Docker bind mounts on macOS.
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
+      BROWSER: none
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:

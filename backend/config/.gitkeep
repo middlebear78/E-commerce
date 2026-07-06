@@ -1,0 +1,2 @@
+# Place your Firebase Admin service account key here as fbServiceAccountKey.json.
+# It is required by firebase/index.js at startup and is gitignored (never commit it).
